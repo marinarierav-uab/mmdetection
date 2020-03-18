@@ -140,12 +140,12 @@ def collect_results(result_part, size, tmpdir=None):
         # 32 is whitespace
         dir_tensor = torch.full((MAX_LEN, ),
                                 32,
-                                dtype=torch.uint8,
+                                dtype=torch.bool,
                                 device='cuda')
         if rank == 0:
             tmpdir = tempfile.mkdtemp()
             tmpdir = torch.tensor(
-                bytearray(tmpdir.encode()), dtype=torch.uint8, device='cuda')
+                bytearray(tmpdir.encode()), dtype=torch.bool, device='cuda')
             dir_tensor[:len(tmpdir)] = tmpdir
         dist.broadcast(dir_tensor, 0)
         tmpdir = dir_tensor.cpu().numpy().tobytes().decode().rstrip()
